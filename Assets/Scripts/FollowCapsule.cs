@@ -10,5 +10,6 @@ public class FollowCapsule : MonoBehaviour
     void Update()
     {
         transform.position = player.position + offset;
+        transform.localEulerAngles = player.localEulerAngles;
     }
 }

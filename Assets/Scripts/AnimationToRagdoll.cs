@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,16 +7,16 @@ using UnityEngine.UI;
 public class AnimationToRagdoll : MonoBehaviour
 {
     PlayerMovement player;
+    [SerializeField] String playerName;
     [SerializeField] Collider myCollider;
     [SerializeField] float respawnTime = 5.0f;
     Rigidbody[] rigidbodies;
     bool isRagdoll;
-    bool gettingUp;
     Animator anim;
 
     void Start()
     {
-        player = GameObject.Find("Player").GetComponent<PlayerMovement>();
+        player = GameObject.Find(playerName).GetComponent<PlayerMovement>();
         rigidbodies = GetComponentsInChildren<Rigidbody>();
         anim = GetComponent<Animator>();
         ToggleRagdoll(true);
@@ -25,16 +26,9 @@ public class AnimationToRagdoll : MonoBehaviour
     {
         RagdollTest();
         Animations();
-        GetIt();
     }
 
-    void GetIt(){
-        if(Input.GetKeyDown(KeyCode.T)){
-            anim.SetBool("Dance", true);
-        } else if(Input.GetKeyDown(KeyCode.P)){
-            anim.SetBool("Dance", false);
-        }
-    }
+    
 
     void RagdollTest(){
         if(!isRagdoll && Input.GetKeyDown(KeyCode.Space)){
@@ -55,22 +49,22 @@ public class AnimationToRagdoll : MonoBehaviour
 
     private IEnumerator GetBackUp(){
         yield return new WaitForSeconds(respawnTime);
-        gettingUp = true;
         ToggleRagdoll(true);
         
     }
 
     void Animations(){
         if(anim.enabled){
-            if(player.move != Vector3.zero){
+            if(player.dir != Vector3.zero){
                 anim.SetBool("Walk", true);
+                anim.SetBool("Dance", false);
+            } else if(Input.GetKeyDown(KeyCode.T)){
+                anim.SetBool("Dance", true);
+                anim.SetBool("Walk", false);   
+            } else if(Input.GetKeyDown(KeyCode.P)){
+                anim.SetBool("Dance", false);
             } else {
                 anim.SetBool("Walk", false);
-            }
-
-            if(gettingUp){
-                anim.applyRootMotion = true;
-                anim.SetBool("Stand", true);
             }
         }
     }
