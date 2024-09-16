@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class AnimationToRagdoll : MonoBehaviour
 {
+    GameManager gameManager;
     PlayerMovement player;
     [SerializeField] String playerName;
     [SerializeField] Collider myCollider;
@@ -16,6 +17,7 @@ public class AnimationToRagdoll : MonoBehaviour
 
     void Start()
     {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         player = GameObject.Find(playerName).GetComponent<PlayerMovement>();
         rigidbodies = GetComponentsInChildren<Rigidbody>();
         anim = GetComponent<Animator>();
@@ -55,14 +57,16 @@ public class AnimationToRagdoll : MonoBehaviour
 
     void Animations(){
         if(anim.enabled){
-            if(player.dir != Vector3.zero){
+            if(gameManager.fight){
+                anim.SetBool("FightIdle", true);
+            } else if(player.dir != Vector3.zero){
                 anim.SetBool("Walk", true);
-                anim.SetBool("Dance", false);
-            } else if(Input.GetKeyDown(KeyCode.T)){
+            } else if(playerName == "Player2" && GameObject.Find("Player").GetComponent<PlayerMovement>().P1IsDed){
+                anim.SetBool("Walk", false);
                 anim.SetBool("Dance", true);
-                anim.SetBool("Walk", false);   
-            } else if(Input.GetKeyDown(KeyCode.P)){
-                anim.SetBool("Dance", false);
+            } else if(playerName == "Player" && GameObject.Find("Player2").GetComponent<PlayerMovement>().P2IsDed){
+                anim.SetBool("Walk", false);
+                anim.SetBool("Dance", true);
             } else {
                 anim.SetBool("Walk", false);
             }
