@@ -57,8 +57,14 @@ public class AnimationToRagdoll : MonoBehaviour
 
     void Animations(){
         if(anim.enabled){
-            if(gameManager.fight){
-                anim.SetBool("FightIdle", true);
+            if(gameManager.fight && !gameManager.roundOver){
+                if(GameObject.Find("Player2").GetComponent<PlayerMovement>().P1Hit && playerName == "Player"){
+                    anim.SetTrigger("Hit");
+                } else if(GameObject.Find("Player").GetComponent<PlayerMovement>().P2Hit && playerName == "Player2"){
+                    anim.SetTrigger("Hit");
+                } else {
+                    anim.SetBool("FightIdle", true);
+                }
             } else if(player.dir != Vector3.zero){
                 anim.SetBool("Walk", true);
             } else if(playerName == "Player2" && GameObject.Find("Player").GetComponent<PlayerMovement>().P1IsDed){

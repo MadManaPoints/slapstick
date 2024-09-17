@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public int P2Score = 3;
     public bool firstPress;
     public bool timerEnd;
+    public bool roundOver;
     float targetTime;
     PlayerMovement playerOne, playerTwo;
     public KeyCode[] P1Keys = new KeyCode[6];
@@ -31,9 +32,10 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(P2Score);
         text1.transform.position = playerOne.transform.position + offset;
         text2.transform.position = playerTwo.transform.position + offset;
+
+        ScoreTracker();
 
         if(startIndex == 2){
             fight = true;
@@ -54,6 +56,12 @@ public class GameManager : MonoBehaviour
         if(firstPress){
             timerEnd = false;
             firstPress = false;
+        }
+    }
+
+    void ScoreTracker(){
+        if(P1Score == 0 || P2Score == 0){
+            roundOver = true;
         }
     }
 

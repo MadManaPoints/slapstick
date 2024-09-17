@@ -20,6 +20,8 @@ public class PlayerMovement : MonoBehaviour
     bool isMoving;
     public bool P1IsDed;
     public bool P2IsDed;
+    public bool P1Hit;
+    public bool P2Hit;
     bool spar;
     bool inPos;
     bool chooseKeys;
@@ -64,6 +66,7 @@ public class PlayerMovement : MonoBehaviour
             }
 
             if(playerOne && Input.GetKeyDown(KeyCode.R)){
+                playerRb.isKinematic = true;
                 transform.position = playerOneSparPos;
                 transform.localEulerAngles = new Vector3(0f, 90.0f, 0f);
                 if(!inPos){
@@ -72,6 +75,7 @@ public class PlayerMovement : MonoBehaviour
                 }
                 inPos = true;
             } else if(!playerOne && Input.GetKeyDown(KeyCode.Y)){
+                playerRb.isKinematic = true;
                 transform.position = playerTwoSparPos;
                 transform.localEulerAngles = new Vector3(0f, 270.0f, 0f);
                 if(!inPos){
@@ -101,22 +105,30 @@ public class PlayerMovement : MonoBehaviour
             gameManager.P1Text.text = firstKey.ToString();
             gameManager.P2Text.text = secondKey.ToString();
 
-            if(playerOne){
-                if(Input.GetKeyDown(firstKey)){
-                    gameManager.timerEnd = false;
-                    gameManager.P2Score -= 1;
-                    gameManager.firstPress = true;
-                }
-            } else{
-                if(Input.GetKeyDown(secondKey)){
-                    gameManager.timerEnd = false;
-                    gameManager.P1Score -= 1;
-                    gameManager.firstPress = true;
+            if(!gameManager.firstPress){
+                if(playerOne){
+                    if(Input.GetKeyDown(firstKey)){
+                        gameManager.firstPress = true;
+                        P2Hit = true;
+                        gameManager.timerEnd = false;
+                        gameManager.P2Score -= 1;
+                    
+                    }
+                } else{
+                    if(Input.GetKeyDown(secondKey)){
+                        gameManager.firstPress = true;
+                        P1Hit = true;
+                        gameManager.timerEnd = false;
+                        gameManager.P1Score -= 1;
+                    }
                 }
             }
+            
         } else if(gameManager.fight && !gameManager.timerEnd){
             gameManager.P1Text.text = "";
+            P1Hit = false;
             gameManager.P2Text.text = "";
+            P2Hit = false;
         }
     }
 
