@@ -10,7 +10,6 @@ public class AnimationToRagdoll : MonoBehaviour
     PlayerMovement player;
     [SerializeField] String playerName;
     [SerializeField] Collider myCollider;
-    [SerializeField] float respawnTime = 5.0f;
     Rigidbody[] rigidbodies;
     bool isRagdoll;
     Animator anim;
@@ -26,16 +25,13 @@ public class AnimationToRagdoll : MonoBehaviour
 
     void Update()
     {
-        RagdollTest();
+        //RagdollTest();
         Animations();
     }
-
-    
 
     void RagdollTest(){
         if(!isRagdoll && Input.GetKeyDown(KeyCode.Space)){
             ToggleRagdoll(false);
-            //StartCoroutine(GetBackUp());
         }
     }
 
@@ -49,12 +45,6 @@ public class AnimationToRagdoll : MonoBehaviour
         anim.enabled = isAnimating;
     }
 
-    private IEnumerator GetBackUp(){
-        yield return new WaitForSeconds(respawnTime);
-        ToggleRagdoll(true);
-        
-    }
-
     void Animations(){
         if(anim.enabled){
             if(gameManager.fight && !gameManager.roundOver){
@@ -65,7 +55,7 @@ public class AnimationToRagdoll : MonoBehaviour
                 } else {
                     anim.SetBool("FightIdle", true);
                 }
-            } else if(player.dir != Vector3.zero){
+            } else if(player.dir != Vector3.zero && !player.inPos){
                 anim.SetBool("Walk", true);
             } else if(playerName == "Player2" && GameObject.Find("Player").GetComponent<PlayerMovement>().P1IsDed){
                 anim.SetBool("Walk", false);
@@ -76,6 +66,8 @@ public class AnimationToRagdoll : MonoBehaviour
             } else {
                 anim.SetBool("Walk", false);
             }
+
+            
         }
     }
 }

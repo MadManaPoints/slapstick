@@ -23,7 +23,7 @@ public class PlayerMovement : MonoBehaviour
     public bool P1Hit;
     public bool P2Hit;
     bool spar;
-    bool inPos;
+    public bool inPos;
     bool chooseKeys;
     Vector3 playerOneSparPos = new Vector3(-0.5f, 0.217f, -0.4f);
     Vector3 playerTwoSparPos = new Vector3(0.7f, 0.217f, -0.4f);
@@ -46,7 +46,6 @@ public class PlayerMovement : MonoBehaviour
         }
         SparPos();
         TrackScore();
-        
     }
     void FixedUpdate()
     {        
@@ -155,7 +154,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void Movement(){
-        if(isMoving){
+        if(isMoving && !inPos){
             if(currentKey == keys[0]){
                 dir = new Vector3(0f, 0f, 1.0f);
             }
